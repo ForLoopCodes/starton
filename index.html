@@ -140,7 +140,23 @@
               textShow.innerHTML = randomstring;
             }, 50);
           } else {
-            lightning.innerHTML = "? google " + inputVal;
+            // get search results from duckduckgo api
+            let results;
+            fetch(
+              `https://api.duckduckgo.com/?q=${inputVal}&format=json&pretty=1`
+            )
+              .then((res) => res.json())
+              .then((data) => {
+                results = data.RelatedTopics;
+                if (results.length > 0) {
+                  lightning.innerHTML = "? " + results[0].Text;
+                } else {
+                  lightning.innerHTML = "? google " + inputVal;
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           }
         } else {
           lightning2.style.display = "block";
