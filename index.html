@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search</title>
+    <style>
+      * {
+        transition: 0.3s;
+      }
+
+      html,
+      body,
+      .viewport {
+        background-color: #000814;
+      }
+
+      input {
+        opacity: 0;
+        pointer-events: none;
+        display: hidden;
+      }
+
+      .text-show {
+        width: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: transparent;
+        border: none;
+        outline: none;
+        font-size: 2em;
+        color: #7ae582;
+        text-align: center;
+        font-family: "Jetbrains mono", sans-serif;
+        font-weight: 300;
+      }
+
+      .cursor {
+        color: #c1121f;
+      }
+
+      .ligntning-search {
+        font-size: 0.6em !important;
+        color: #edae49 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="search" autocomplete="off" defaultvalue="" />
+    <span class="text-show">
+      <font style="color: #c1121f">&gt;</font>
+      <font class="typed-text"></font>
+      <br />
+      <div class="ligntning-search"></div>
+      <div class="ligntning-time ligntning-search"></div>
+    </span>
+    <script>
+      const input = document.querySelector("input");
+      const lightning = document.querySelector(".ligntning-search");
+      const lightning2 = document.querySelector(".ligntning-time");
+      input.focus();
+      // no matter if input is focussed or not, pressing a key will change the value
+      input.addEventListener("blur", () => {
+        input.focus();
+      });
+      time = new Date();
+      let timeShown =
+        time.getHours().toString().padStart(2, "0") +
+        ":" +
+        time.getMinutes().toString().padStart(2, "0") +
+        " / " +
+        time.getDate().toString().padStart(2, "0") +
+        "-" +
+        time.getMonth().toString().padStart(2, "0") +
+        "-" +
+        time.getFullYear();
+      lightning2.innerHTML = "? " + timeShown;
+
+      input.addEventListener("focus", (e) => {
+        const inputVal = e.target.value;
+        setInterval(function () {
+          time = new Date();
+          timeShown =
+            time.getHours().toString().padStart(2, "0") +
+            ":" +
+            time.getMinutes().toString().padStart(2, "0") +
+            " / " +
+            time.getDate().toString().padStart(2, "0") +
+            "-" +
+            time.getMonth().toString().padStart(2, "0") +
+            "-" +
+            time.getFullYear();
+          lightning2.innerHTML = "? " + timeShown;
+        }, 1000);
+      });
+      input.addEventListener("input", (e) => {
+        const inputVal = e.target.value;
+        const textShow = document.querySelector(".typed-text");
+        textShow.textContent = inputVal.trim();
+        console.log(inputVal);
+        if (inputVal.trim() !== "") {
+          lightning2.style.display = "none";
+          lightning.style.display = "block";
+          if (
+            inputVal.includes("+") ||
+            inputVal.includes("-") ||
+            inputVal.includes("*") ||
+            (inputVal.includes("/") && !inputVal.includes("://")) ||
+            (inputVal.includes("%") && eval(inputVal) !== undefined)
+          ) {
+            lightning.innerHTML = "? = " + eval(inputVal);
+          } else if (inputVal.startsWith("bing")) {
+            lightning.innerHTML = "? bing " + inputVal.replace("bing", "");
+          } else if (inputVal.startsWith("ddg")) {
+            lightning.innerHTML = "? duck " + inputVal.replace("ddg", "");
+          } else if (inputVal.startsWith("yt")) {
+            lightning.innerHTML = "? youtube " + inputVal.replace("yt", "");
+          } else if (inputVal.startsWith("gh")) {
+            lightning.innerHTML = "? github " + inputVal.replace("gh", "");
+          } else if (inputVal.includes("www.")) {
+            lightning.innerHTML = "? " + inputVal;
+          } else if (inputVal.includes(".com")) {
+            lightning.innerHTML = "? " + inputVal;
+          } else if (inputVal.includes(".in")) {
+            lightning.innerHTML = "? " + inputVal;
+          } else if (inputVal === "random random random") {
+            setInterval(function () {
+              chars =
+                "qwertyuiopasdfghjklzxcvbnm1234567890!@#$%^&*()_+/.,<>?;':[]{}|";
+              var randomstring = "";
+              for (var i = 0; i < 10; i++) {
+                var rnum = Math.floor(Math.random() * chars.length);
+                randomstring += chars.substring(rnum, rnum + 1);
+              }
+              lightning.innerHTML = randomstring;
+              textShow.innerHTML = randomstring;
+            }, 50);
+          } else {
+            lightning.innerHTML = "? google " + inputVal;
+          }
+        } else {
+          lightning2.style.display = "block";
+          lightning.style.display = "none";
+        }
+      });
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && e.target.value.trim() !== "") {
+          switch (true) {
+            case e.target.value.startsWith("bing "):
+              window.location.href = `https://www.bing.com/search?q=${e.target.value.replace(
+                "bing ",
+                ""
+              )}`;
+              break;
+            case e.target.value.startsWith("ddg "):
+              window.location.href = `https://duckduckgo.com/?q=${e.target.value.replace(
+                "ddg ",
+                ""
+              )}`;
+              break;
+            case e.target.value.startsWith("yt"):
+              window.location.href =
+                e.target.value.trim().replace("yt", "") !== ""
+                  ? `https://www.youtube.com/results?search_query=${e.target.value.replace(
+                      "yt ",
+                      ""
+                    )}`
+                  : "https://www.youtube.com";
+              break;
+            case e.target.value.startsWith("gh "):
+              window.location.href = `https://www.github.com/search?q=${e.target.value.replace(
+                "gh ",
+                ""
+              )}`;
+              break;
+            case e.target.value.includes("www."):
+              window.location.href = `https://${e.target.value}`;
+              break;
+            case e.target.value.includes(".com"):
+              window.location.href = `https://${e.target.value}`;
+              break;
+            case e.target.value.includes(".in"):
+              window.location.href = `https://${e.target.value}`;
+              break;
+            default:
+              window.location.href = `https://www.google.com/search?q=${e.target.value}`;
+              break;
+          }
+        }
+      });
+      input.addEventListener("keyup", (e) => {
+        var cursorPosition = input.selectionStart;
+        const textShow = document.querySelector(".typed-text");
+        var cursor = "|";
+        var textBeforeCursor = e.target.value.substring(0, cursorPosition);
+        var textAfterCursor = e.target.value.substring(
+          cursorPosition,
+          e.target.value.length
+        );
+        if (input.selectionStart !== input.selectionEnd) {
+          selectedText = e.target.value.substring(
+            input.selectionStart,
+            input.selectionEnd
+          );
+          textAfterSelection = e.target.value.substring(
+            input.selectionEnd,
+            e.target.value.length
+          );
+          textShow.innerHTML =
+            textBeforeCursor +
+            "<font class='cursor'>" +
+            cursor +
+            "</font>" +
+            selectedText +
+            "<font class='cursor'>" +
+            cursor +
+            "</font>" +
+            textAfterSelection;
+        } else {
+          textShow.innerHTML =
+            textBeforeCursor +
+            "<font class='cursor'>" +
+            cursor +
+            "</font>" +
+            textAfterCursor;
+        }
+      });
+    </script>
+  </body>
+</html>
