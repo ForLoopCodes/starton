@@ -106,11 +106,7 @@
           lightning2.style.display = "none";
           lightning.style.display = "block";
           if (
-            inputVal.includes("+") ||
-            inputVal.includes("-") ||
-            inputVal.includes("*") ||
-            (inputVal.includes("/") && !inputVal.includes("://")) ||
-            (inputVal.includes("%") && eval(inputVal) !== undefined)
+            !inputVal.match(/[^0-9\+\-\*\/\%\(\)\.]/g)
           ) {
             lightning.innerHTML = "? = " + eval(inputVal);
           } else if (inputVal.startsWith("bing")) {
@@ -150,12 +146,14 @@
                 results = data.RelatedTopics;
                 if (results.length > 0) {
                   lightning.innerHTML = "? " + results[0].Text;
+                  console.log(results)
                 } else {
                   lightning.innerHTML = "? google " + inputVal;
                 }
               })
               .catch((err) => {
                 console.log(err);
+                lightning.innerHTML = "? google " + inputVal;
               });
           }
         } else {
