@@ -3,7 +3,6 @@
 ### A terminal-like UI based browser homepage with many unique features. (and an easter egg)
 
 ---
-
 ## How to use
 
 `- ` Type a search keyword and hit enter to search Google.
@@ -22,8 +21,7 @@
 
 `- ` Type `random random random` for easter egg
 
---- 
-
+---
 ## Features
 
 `- ` AI search results from duckduckgo as you type.
@@ -31,3 +29,14 @@
 `- ` Time and Date
 
 `- ` Cool terminal-type UI with blazing-fast speed.
+
+---
+## How to set default starton page
+
+`- ` Open your browser settings.
+
+`- ` Go to the homepage section.
+
+`- ` Paste the link `https://forloopcodes.github.io/starton/` in the homepage section.
+
+`- ` Done!
